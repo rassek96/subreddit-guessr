@@ -1,5 +1,5 @@
 const snoowrap = require('snoowrap')
-require('dotenv').config()
+require('dotenv').load()
 
 const r = new snoowrap({
   userAgent: process.env.USER_AGENT,
@@ -10,9 +10,8 @@ const r = new snoowrap({
   refreshToken: process.env.REFRESH_TOKEN,
 })
 
-const getPosts = async () => {
-  const hotPosts = await r.getHot()
-  console.log('hotPosts', hotPosts[0])
-}
 
-getPosts()
+export const getPosts = () => {
+  const hotPosts = r.getHot()
+  return hotPosts
+}
