@@ -16,6 +16,7 @@ const LogoContainer = styled.div`
   justify-content: center;
   align-items: center;
   color: black;
+  cursor: default;
 `
 const LogoText = styled.span`
   margin: 10px;

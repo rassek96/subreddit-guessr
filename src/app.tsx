@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {getPosts} from './api/submission'
 import {Main} from './components/main'
 import {TopBar} from './components/topBar'

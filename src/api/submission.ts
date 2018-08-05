@@ -1,15 +1,7 @@
-const snoowrap = require('snoowrap')
-require('dotenv').load()
+import snoowrap from 'snoowrap'
+import {config} from './env'
 
-const r = new snoowrap({
-  userAgent: process.env.USER_AGENT,
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  username: process.env.USERNAME,
-  password: process.env.PASSWORD,
-  refreshToken: process.env.REFRESH_TOKEN,
-})
-
+const r = new snoowrap(config)
 
 export const getPosts = () => {
   const hotPosts = r.getHot()
