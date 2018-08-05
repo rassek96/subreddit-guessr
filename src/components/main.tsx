@@ -37,6 +37,9 @@ const SearchBar = styled.div`
     background-color: white;
   }
   > button {
+    &:hover {
+      background-color: #008AAA;
+    }
     background-color: #008CBA;
     border: none;
     color: white;
@@ -100,6 +103,9 @@ const ScoreScreenText = styled.div`
   color: white;
   font-size: 20px;
   > button {
+    &:hover {
+      background-color: #008AAA;
+    }
     background-color: #008CBA;
     color: white;
     font-size: 16px;
