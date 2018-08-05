@@ -13,6 +13,7 @@
     "no-var-requires": false,
     "member-access": false,
     "jsx-boolean-value": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "interface-over-type-literal": false
   }
 }
