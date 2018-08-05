@@ -2,6 +2,11 @@ import marked from 'marked'
 import * as React from 'react'
 import styled from 'styled-components'
 
+const CommentsHeader = styled.div`
+  width: 95%;
+  color: gray;
+  border-bottom: 1px solid gray;
+`
 const CommentField = styled.div`
   width: 92%;
   border-bottom: 1px solid gray;
@@ -31,9 +36,9 @@ export class Comments extends React.Component<Props, State> {
 
   render() {
     const {comments} = this.props
-    console.log('commentUPDATE')
     return (
       <div>
+        <CommentsHeader>Comments</CommentsHeader>
         {comments.map((comment, i) => (
           <CommentField key={i}>
             <Score>

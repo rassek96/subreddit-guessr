@@ -34,6 +34,7 @@ const SearchBar = styled.div`
     width: 500px;
     font-size: 18px;
     border: none;
+    background-color: white;
   }
   > button {
     background-color: #008CBA;
@@ -86,14 +87,40 @@ const PostDescription = styled.div`
     padding: 10px;
   }
 `
+const ScoreScreen = styled(Content)`
+  background-color: #FF4500;
+  box-shadow: none;
+  padding: 20px;
+`
+const ScoreScreenTitle = styled.div`
+  color: white;
+  font-size: 30px;
+`
+const ScoreScreenText = styled.div`
+  color: white;
+  font-size: 20px;
+  > button {
+    background-color: #008CBA;
+    color: white;
+    font-size: 16px;
+    margin: 10px;
+    width: 150px;
+    height: 60px;
+    cursor: pointer;
+  }
+`
 const CommentsContainer = styled.div`
   width: 100%;
   text-align: left;
   padding: 10px;
 `
 
+const isSubMatch = (value: string, subreddit: string) => {
+  return subreddit.toLowerCase() === `r/${value.toLowerCase()}`
+}
+
 type Props = {
-  posts: object,
+  posts: any[],
 }
 type State = {
   post: any,
@@ -102,9 +129,10 @@ type State = {
   buttonLoading: boolean,
   comments: object[],
   commentLoading: boolean,
+  subNext: {isMatch: boolean, isNext: boolean},
 }
 
-const inputPlaceholderText = 'What subreddit was the post below submitted to?'
+const inputPlaceholderText = 'Which subreddit was the post below submitted to?'
 export class Main extends React.Component<Props, State> {
   constructor(props) {
     super(props)
@@ -115,7 +143,11 @@ export class Main extends React.Component<Props, State> {
       inputValue: '',
       buttonLoading: false,
       comments: [],
-      commentLoading: false
+      commentLoading: false,
+      subNext: {
+        isMatch: false,
+        isNext: false,
+      },
     }
   }
 
@@ -135,26 +167,48 @@ export class Main extends React.Component<Props, State> {
     })
   }
 
-  updatePost() {
-    console.log(this.state.inputValue)
-    console.log(this.state.post.subreddit_name_prefixed)
+  checkSubreddit() {
+    const match = isSubMatch(this.state.inputValue, this.state.post.subreddit_name_prefixed)
     this.setState({
-      buttonLoading: true
+      buttonLoading: true,
+      subNext: {
+        isMatch: match,
+        isNext: true,
+      },
     })
-    // TODO CHECK SUBREDDIT CORRECT HERE
-    const currentPostIndex = this.state.postIndex + 1
-    const currentPost = this.props.posts[currentPostIndex]
-    this.setState({
-      postIndex: currentPostIndex,
-      post: currentPost,
-      buttonLoading: false
-    })
-    this.loadComments(currentPost)
+  }
+  
+  nextPost(isNext) {
+    if (isNext) {
+      const currentPostIndex = (this.props.posts.length >= this.state.postIndex + 2)
+        ? this.state.postIndex + 1
+        : 0
+      const currentPost = this.props.posts[currentPostIndex]
+      this.setState({
+        postIndex: currentPostIndex,
+        post: currentPost,
+        buttonLoading: false,
+        inputValue: '',
+        subNext: {
+          isMatch: false,
+          isNext: false,
+        },
+      })
+      this.loadComments(currentPost)
+    }
+    else {
+      this.setState({
+        buttonLoading: false,
+        subNext: {
+          isMatch: false,
+          isNext: false,
+        },
+      })
+    }
   }
 
   render() {
-    const {buttonLoading, inputValue, post, comments, commentLoading } = this.state
-    console.log(post)
+    const {buttonLoading, inputValue, post, comments, commentLoading, subNext } = this.state
     let postContent
     if (post.is_self) {
       postContent = <div>{post.selftext}</div>
@@ -181,28 +235,66 @@ export class Main extends React.Component<Props, State> {
             onFocus={(e) => e.target.placeholder = ''}
             onBlur={(e) => e.target.placeholder = inputPlaceholderText}
             onChange={e => this.setState({inputValue: e.target.value})}
+            disabled={subNext.isNext}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                this.checkSubreddit()
+              }
+            }}
           />
           <button
-            onClick={() => this.updatePost()}
+            disabled={subNext.isNext}
+            onClick={() => this.checkSubreddit()}
           >
-            {buttonLoading ? <MoonLoader size={28} /> : 'Next'}
+            {buttonLoading ? <MoonLoader size={28} /> : 'Enter'}
           </button>
         </SearchBar>
-        <Content>
-          <PostTitle>
-            <PostScore>Score: {post.score}</PostScore>
-            <PostUser>User: [Hidden]</PostUser>
-            <div>{post.title && post.title}</div>
-          </PostTitle>
-          <PostDescription>
-            <div>{postContent}</div>
-          </PostDescription>
-          <CommentsContainer>
-            {commentLoading 
-              ? <BarLoader width={98} widthUnit='%' height={5} color={'#FF4500'} /> 
-              : <Comments comments={comments} />}
-          </CommentsContainer>
-        </Content>
+        {subNext.isNext ? (
+          <ScoreScreen>
+            <ScoreScreenTitle>
+              {`/${post.subreddit_name_prefixed}`}
+            </ScoreScreenTitle>
+            {subNext.isMatch ? (
+              <ScoreScreenText>
+                It's a match!
+              </ScoreScreenText>
+            ) : (
+              <ScoreScreenText>
+                It's not a match
+              </ScoreScreenText>
+            )}
+            <ScoreScreenText>
+              <button
+                onClick={() => this.nextPost(false)}
+              >
+                See post again
+              </button>
+            </ScoreScreenText>
+            <ScoreScreenText>
+              <button
+                onClick={() => this.nextPost(true)}
+              >
+                Next post
+              </button>
+            </ScoreScreenText>
+          </ScoreScreen>
+        ) : (
+          <Content>
+            <PostTitle>
+              <PostScore>Score: {post.score}</PostScore>
+              <PostUser>User: [Hidden]</PostUser>
+              <div>{post.title && post.title}</div>
+            </PostTitle>
+            <PostDescription>
+              <div>{postContent}</div>
+            </PostDescription>
+            <CommentsContainer>
+              {commentLoading 
+                ? <BarLoader width={98} widthUnit='%' height={5} color={'#FF4500'} /> 
+                : <Comments comments={comments} />}
+            </CommentsContainer>
+          </Content>  
+        )}
       </Container>
     )
   }
