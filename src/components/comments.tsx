@@ -11,6 +11,9 @@ const CommentField = styled.div`
   width: 92%;
   border-bottom: 1px solid gray;
   padding: 20px;
+  @media (max-width: 400px) {
+    padding: 5px;
+  }
 `
 const Score = styled.div`
   font-size: 14px;
@@ -22,6 +25,12 @@ const User = styled.div`
 `
 const Body = styled.div`
   margin-top: 5px;
+  @media (max-width: 660px) {
+    font-size: 14px;
+  }
+  @media (max-width: 400px) {
+    font-size: 12px;
+  }
 `
 
 type Props = {

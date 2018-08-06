@@ -7,6 +7,12 @@ const Panel = styled.div`
   width: 100%;
   height: 100px;
   display: flex;
+  @media (max-width: 660px) {
+    height: 80px;
+  }
+  @media (max-width: 400px) {
+    height: 60px;
+  }
 `
 const LogoContainer = styled.div`
   width: 320px;
@@ -17,15 +23,35 @@ const LogoContainer = styled.div`
   align-items: center;
   color: black;
   cursor: default;
+  @media (max-width: 660px) {
+    height: 80px;
+  }
+  @media (max-width: 400px) {
+    height: 60px;
+  }
 `
 const LogoText = styled.span`
   margin: 10px;
   font-size: 40px;
   font-weight: 600;
+  @media (max-width: 660px) {
+    font-size: 36px;
+  }
+  @media (max-width: 400px) {
+    font-size: 26px;
+  }
 `
 const Logo = styled.img`
   width: 80px;
   height: 80px;
+  @media (max-width: 660px) {
+    height: 60px;
+    width: 60px;
+  }
+  @media (max-width: 400px) {
+    height: 40px;
+    width: 40px;
+  }
 `
 
 export const TopBar = () => (

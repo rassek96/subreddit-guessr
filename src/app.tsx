@@ -10,7 +10,8 @@ export class App extends React.Component<any,any> {
       posts: []
     }
   }
-  componentDidMount() { // TODO MAKE THIS MORE EFFECIENT
+
+  componentDidMount() {
     getPosts().then(post => {
       this.setState({posts: post})
     })
