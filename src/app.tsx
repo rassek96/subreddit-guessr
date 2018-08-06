@@ -10,6 +10,7 @@ export class App extends React.Component<any,any> {
       posts: []
     }
   }
+
   componentDidMount() {
     getPosts().then(post => {
       this.setState({posts: post})
