@@ -21,12 +21,26 @@ const SearchBar = styled.div`
   flex-flow: row;
   justify-content: center;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+  @media (max-width: 660px) {
+      width: 95%;
+      margin-bottom: 20px;
+  }
+  @media (max-width: 400px) {
+      margin-bottom: 10px;
+  }
   > span {
     padding: 8px;
     height: 30px;
     font-size: 32px;
     background-color: white;
     border-radius: 5px 0px 0px 5px;
+    @media (max-width: 660px) {
+      height: 20px;
+      font-size: 20px;
+    }
+    @media (max-width: 400px) {
+      font-size: 16px;
+    }
   }
   > input {
     padding: 8px;
@@ -35,6 +49,14 @@ const SearchBar = styled.div`
     font-size: 18px;
     border: none;
     background-color: white;
+    @media (max-width: 660px) {
+      width: 100%;
+      height: 20px;
+      font-size: 12px;
+    }
+    @media (max-width: 400px) {
+      font-size: 10px;
+    }
   }
   > button {
     &:hover {
@@ -47,6 +69,9 @@ const SearchBar = styled.div`
     font-size: 16px;
     width: 50px;
     cursor: pointer;
+    @media (max-width: 660px) {
+      font-size: 12px;
+    }
   }
 `
 const Content = styled.div`
@@ -56,6 +81,12 @@ const Content = styled.div`
   background-color: white;
   border-radius: 5px 5px 5px 5px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+  @media (max-width: 660px) {
+    width: 99%;
+  }
+  @media (max-width: 400px) {
+    width: 98%;
+  }
 `
 const PostTitle = styled.div`
   width: 100%;
@@ -67,10 +98,19 @@ const PostTitle = styled.div`
   > div {
     padding: 15px;
     padding-top: 0;
+    @media (max-width: 400px) {
+      font-size: 14px;
+    }
   }
   > span {
     color: gray;
     font-size: 14px;
+    @media (max-width: 400px) {
+      font-size: 13px;
+    }
+  }
+  @media (max-width: 400px) {
+    font-size: 16px;
   }
 `
 const PostScore = styled.span`
@@ -223,7 +263,11 @@ export class Main extends React.Component<Props, State> {
       postContent = <ReactPlayer url={post.media.reddit_video.fallback_url} playing={true} style={{margin: 'auto'}}/>
     }
     else if (post.post_hint === 'image') {
-      postContent = <img src={post.url}/>
+      postContent = <img src={post.url} style={{
+        objectFit: 'cover',
+        maxWidth: '95%',
+        maxHeight: '99%',
+      }} />
     }
     else if (post.post_hint === 'link' || post.url) {
       postContent = <a href={post.url} target='_blank'>{post.url}</a>
