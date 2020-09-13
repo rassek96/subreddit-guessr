@@ -1,9 +1,17 @@
-import snoowrap from 'snoowrap'
-import {config} from './env'
+import Snoowrap from "snoowrap";
+import { config } from "./env";
 
-const r = new snoowrap(config)
+const r = new Snoowrap(config);
 
-export const getPosts = () => {
-  const hotPosts = r.getHot()
-  return hotPosts
-}
+export type Post = Snoowrap.Submission;
+export type Comment = Snoowrap.Comment;
+
+export const getPosts = (): Promise<Post[]> => {
+  return r
+    .getHot()
+    .then((hotPosts) => hotPosts ?? [])
+    .catch((error) => {
+      console.error(error.message);
+      return [];
+    });
+};

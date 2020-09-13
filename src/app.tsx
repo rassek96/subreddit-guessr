@@ -1,33 +1,20 @@
-import * as React from 'react'
-import {getPosts} from './api/submission'
-import {Main} from './components/main'
-import {TopBar} from './components/topBar'
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { getPosts, Post } from "./api/submission";
+import { Main } from "./Components/Main";
+import { TopBar } from "./Components/TopBar";
 
-export class App extends React.Component<any,any> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      posts: []
-    }
-  }
+export const App = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  componentDidMount() {
-    getPosts().then(post => {
-      this.setState({posts: post})
-    })
-  }
+  useEffect(() => {
+    getPosts().then(setPosts);
+  }, []);
 
-  render() {
-    const posts = this.state.posts
-    return posts && posts.length ? (
-      <div id='container'>
-        <TopBar />
-        <Main posts={posts} />
-      </div>
-    ) : (
-      <div id='container'>
-        <TopBar />
-      </div>
-    )
-  }
-}
+  return (
+    <div>
+      <TopBar />
+      {posts.length && <Main posts={posts} />}
+    </div>
+  );
+};
